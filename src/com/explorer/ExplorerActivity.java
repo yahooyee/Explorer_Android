@@ -145,6 +145,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 
 	private ThumbnailCreator mThumbnail;
 	private boolean thumbnail_flag = true;
+	public static int number_items = 0;
 
 	// ===========================================================
 	// Constructors
@@ -677,21 +678,29 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 		myPath.setText(s);
 		listFileFolder = new ArrayList<FileFolder>();
 		File[] files = f.listFiles();
+		// number_items = files.length;
 		ArrayList<String> listFileName = new ArrayList<String>();
 		for (int i = 0; i < files.length; i++) {
 			listFileName.add(files[i].getName());
 			File file = files[i];
 			if (file.isDirectory()) {
+
 				if (!mShowHiddenFiles) {
 					if (file.getName().charAt(0) != '.') {
 						fileFolder = new FileFolder(R.drawable.folder_snow,
 								file.getName(), file.length(),
 								file.lastModified());
+						if (file.list() != null) {
+							fileFolder.setNumberItems(file.list().length);
+						}
 						listFileFolder.add(fileFolder);
 					}
 				} else {
 					fileFolder = new FileFolder(R.drawable.folder_snow,
 							file.getName(), file.length(), file.lastModified());
+					if (file.list() != null) {
+						fileFolder.setNumberItems(file.list().length);
+					}
 					listFileFolder.add(fileFolder);
 				}
 			} else {
@@ -705,8 +714,9 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 						|| file.getName().endsWith(".PNG")
 						|| file.getName().endsWith(".GIF")
 						|| file.getName().endsWith(".TIFF")) {
-					if (mThumbnail == null)
+					if (mThumbnail == null) {
 						mThumbnail = new ThumbnailCreator(52, 52);
+					}
 					if (thumbnail_flag && file.length() != 0) {
 						Bitmap thumb = mThumbnail
 								.isBitmapCached(file.getPath());
@@ -895,7 +905,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 			adapter.sort(new Comparator<FileFolder>() {
 				@Override
 				public int compare(FileFolder lhs, FileFolder rhs) {
-					return new Double(lhs.getModified()).compareTo(rhs
+					return new Long(lhs.getModified()).compareTo(rhs
 							.getModified());
 				}
 			});
@@ -903,7 +913,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 
 				@Override
 				public int compare(FileFolder lhs, FileFolder rhs) {
-					return new Double(lhs.getModified()).compareTo(rhs
+					return new Long(lhs.getModified()).compareTo(rhs
 							.getModified());
 				}
 			});
