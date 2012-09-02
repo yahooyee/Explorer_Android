@@ -21,7 +21,8 @@ public class Setting extends Activity {
 	private boolean mSpaceChanged = false;
 	private boolean hidden_state;
 	private boolean thumbnail_state;
-	private int color_state, sort_state, mSpaceState;
+	private int color_state, sort_state, mSpaceState, sx;
+	private boolean isSX = false;
 	private Intent is = new Intent();
 
 	@Override
@@ -34,11 +35,13 @@ public class Setting extends Activity {
 		color_state = i.getExtras().getInt("COLOR");
 		sort_state = i.getExtras().getInt("SORT");
 		mSpaceState = i.getExtras().getInt("SPACE");
+		sx = i.getExtras().getInt("SAPXEP");
 		final CheckBox hidden_bx = (CheckBox) findViewById(R.id.setting_hidden_box);
 		final CheckBox thumbnail_bx = (CheckBox) findViewById(R.id.setting_thumbnail_box);
 		final CheckBox space_bx = (CheckBox) findViewById(R.id.setting_storage_box);
 		final ImageButton color_bt = (ImageButton) findViewById(R.id.setting_text_color_button);
 		final ImageButton changBackground = (ImageButton) findViewById(R.id.setting_background);
+		final ImageButton sort = (ImageButton) findViewById(R.id.setSort);
 		hidden_bx.setChecked(hidden_state);
 		thumbnail_bx.setChecked(thumbnail_state);
 		space_bx.setChecked(mSpaceState == View.VISIBLE);
@@ -176,6 +179,47 @@ public class Setting extends Activity {
 				builder.create().show();
 			}
 		});
+		sort.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				AlertDialog.Builder builder = new AlertDialog.Builder(
+						Setting.this);
+				builder.setTitle("Sort By");
+				final String[] items = { "Name", "Size", "Type", "Modified" };
+				builder.setSingleChoiceItems(items, sx,
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int index) {
+								switch (index) {
+								case 0:
+									sx = 0;
+									is.putExtra("SAPXEP", sx);
+									isSX = true;
+									break;
+								case 1:
+									sx = 1;
+									is.putExtra("SAPXEP", sx);
+									isSX = true;
+									break;
+								case 2:
+									sx = 2;
+									is.putExtra("SAPXEP", sx);
+									isSX = true;
+									break;
+								case 3:
+									sx = 3;
+									is.putExtra("SAPXEP", sx);
+									isSX = true;
+									break;
+								}
+							}
+						});
+				builder.create().show();
+			}
+		});
 	}
 
 	@Override
@@ -204,7 +248,9 @@ public class Setting extends Activity {
 
 		if (!mSortChanged)
 			is.putExtra("SORT", sort_state);
-
+		if (!isSX)
+			is.putExtra("SAPXEP", sx);
 		setResult(RESULT_CANCELED, is);
 	}
+
 }

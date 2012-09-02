@@ -38,13 +38,19 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -61,6 +67,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -88,7 +95,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 	private final static int UNZIP = 5;
 	private static final int UNZIPTO = 6;
 	private static final int SETTING_REQ = 7;
-
+	private static final int COPY_TYPE = 8;
 	private static final int BUFFER = 2048;
 
 	private static final int THEME_HIGHTLAND = 0;
@@ -118,9 +125,9 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 	private ListView listView;
 	private TextView myPath;
 	private ImageView up, view, home, search, newfolder, sort, paste, about,
-			manager, info, setting, help;
-	private RelativeLayout theme, rlcontrol, rlLocal;
-	private HorizontalScrollView HSV;
+			manager, info, setting, help, backHome;
+	private RelativeLayout theme, rlcontrol, rlURI;
+	private HorizontalScrollView HSV, HSV2, HSV3;
 
 	ArrayList<FileFolder> listFileFolder;
 	private ArrayList<String> control;
@@ -146,10 +153,18 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 	private ThumbnailCreator mThumbnail;
 	private boolean thumbnail_flag = true;
 	public static int number_items = 0;
+	private Handler mHandler;
+	private boolean multi_select_flag = false;
+	private boolean delete_after_copy = false;
+	private ArrayList<String> mMultiSelectData;
+	private int copy_rtn;
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
+	public ExplorerActivity() {
+
+	}
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Getter & Setter
@@ -165,7 +180,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 		setContentView(R.layout.main);
 		theme = (RelativeLayout) findViewById(R.id.theme);
 		rlcontrol = (RelativeLayout) findViewById(R.id.rlControl);
-		rlLocal = (RelativeLayout) findViewById(R.id.rlLocal);
+		// rlLocal = (RelativeLayout) findViewById(R.id.rlLocal);
 		list = (GridView) findViewById(R.id.listGrid);
 		list.setOnItemClickListener(this);
 		list.setOnItemLongClickListener(this);
@@ -182,23 +197,50 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 		home.setOnClickListener(this);
 		search = (ImageView) findViewById(R.id.imvSearch);
 		search.setOnClickListener(this);
-		newfolder = (ImageView) findViewById(R.id.imvNew);
-		newfolder.setOnClickListener(this);
-		sort = (ImageView) findViewById(R.id.imvSort);
-		sort.setOnClickListener(this);
-		paste = (ImageView) findViewById(R.id.imvPaste);
+		// newfolder = (ImageView) findViewById(R.id.imvNew);
+		// newfolder.setOnClickListener(this);
+		// sort = (ImageView) findViewById(R.id.imvSort);
+		// sort.setOnClickListener(this);
+		paste = (ImageView) findViewById(R.id.imvMutil);
 		paste.setOnClickListener(this);
 		manager = (ImageView) findViewById(R.id.imvManager);
 		manager.setOnClickListener(this);
-		info = (ImageView) findViewById(R.id.imvInfo);
-		info.setOnClickListener(this);
-		about = (ImageView) findViewById(R.id.imvAbout);
-		about.setOnClickListener(this);
-		setting = (ImageView) findViewById(R.id.imvSetting);
-		setting.setOnClickListener(this);
-		help = (ImageView) findViewById(R.id.imvHelp);
-		help.setOnClickListener(this);
+		// info = (ImageView) findViewById(R.id.imvInfo);
+		// info.setOnClickListener(this);
+		// about = (ImageView) findViewById(R.id.imvAbout);
+		// about.setOnClickListener(this);
+		// setting = (ImageView) findViewById(R.id.imvSetting);
+		// setting.setOnClickListener(this);
+		// help = (ImageView) findViewById(R.id.imvHelp);
+		// help.setOnClickListener(this);
 		HSV = (HorizontalScrollView) findViewById(R.id.HSV);
+		HSV2 = (HorizontalScrollView) findViewById(R.id.HSVMutil);
+		HSV3 = (HorizontalScrollView) findViewById(R.id.HSV3);
+		rlURI = (RelativeLayout) findViewById(R.id.rlURI);
+		HSV2.setVisibility(View.GONE);
+		HSV3.setVisibility(View.GONE);
+		backHome = (ImageView) findViewById(R.id.imvBackHome);
+		backHome.setOnClickListener(this);
+		ImageView backupApp = (ImageView) findViewById(R.id.imvBackUpApp);
+		backupApp.setOnClickListener(this);
+		ImageView inforApp = (ImageView) findViewById(R.id.imvInforApp);
+		inforApp.setOnClickListener(this);
+		ImageView infoDisk = (ImageView) findViewById(R.id.imvInforDisk);
+		infoDisk.setOnClickListener(this);
+		ImageView taskKill = (ImageView) findViewById(R.id.imvTaskKill);
+		taskKill.setOnClickListener(this);
+		ImageView unInstall = (ImageView) findViewById(R.id.imvUninStall);
+		unInstall.setOnClickListener(this);
+		ImageView backHome = (ImageView) findViewById(R.id.imvBackHome2);
+		backHome.setOnClickListener(this);
+		ImageView copy = (ImageView) findViewById(R.id.imvCopy);
+		copy.setOnClickListener(this);
+		ImageView cut = (ImageView) findViewById(R.id.imvCut);
+		cut.setOnClickListener(this);
+		ImageView delete = (ImageView) findViewById(R.id.imvDelete);
+		delete.setOnClickListener(this);
+		ImageView attack = (ImageView) findViewById(R.id.imvMutil2);
+		attack.setOnClickListener(this);
 		mContext = this;
 		mSettings = getSharedPreferences(PREFS_NAME, 0);
 		boolean hide = mSettings.getBoolean(PREFS_HIDDEN, false);
@@ -220,6 +262,8 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 		} else {
 			sx = sort;
 		}
+		mThumbnail = new ThumbnailCreator(52, 52);
+		setShowThumbnails(true);
 		getDirection("/sdcard");
 	}
 
@@ -235,6 +279,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 			thumbnail = data.getBooleanExtra("THUMBNAIL", true);
 			color = data.getIntExtra("COLOR", -1);
 			setTheme = data.getIntExtra("SORT", 0);
+			sx = data.getIntExtra("SAPXEP", 0);
 			sort = sx;
 			space = data.getIntExtra("SPACE", View.VISIBLE);
 			editor.putBoolean(PREFS_HIDDEN, check);
@@ -249,6 +294,52 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 			setTheme();
 		}
 		getDirection(myPath.getText().toString());
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// TODO Auto-generated method stub
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		switch (item.getItemId()) {
+		case R.id.menuAboutus:
+			about();
+			break;
+		case R.id.menuExit:
+			finish();
+			break;
+		case R.id.menuHelp:
+			Intent in = new Intent(this, Help.class);
+			startActivity(in);
+			break;
+		case R.id.menuManger:
+			break;
+		case R.id.menuNewfolder:
+			file = new File(myPath.getText().toString());
+			creatNewfolder();
+			break;
+		case R.id.menuSetting:
+			Intent settings_int = new Intent(this, Setting.class);
+			settings_int.putExtra("HIDDEN",
+					mSettings.getBoolean(PREFS_HIDDEN, false));
+			settings_int.putExtra("THUMBNAIL",
+					mSettings.getBoolean(PREFS_THUMBNAIL, true));
+			settings_int.putExtra("COLOR", mSettings.getInt(PREFS_COLOR, -1));
+			settings_int.putExtra("SORT", mSettings.getInt(PREFS_THEME, 0));
+			// settings_int.putExtra("SPACE",
+			// mSettings.getInt(PREFS_STORAGE, View.VISIBLE));
+			startActivityForResult(settings_int, SETTING_REQ);
+			break;
+		default:
+			break;
+		}
+		return true;
 	}
 
 	@Override
@@ -315,213 +406,227 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 		fileFolder = listFileFolder.get(position);
 		String link = myPath.getText().toString() + "/" + fileFolder.getName();
 		final File file = new File(link);
-		if (file.isDirectory()) {
-			if (file.canRead()) {
-				try {
-					getDirection(link);
-				} catch (Exception e) {
-				}
-			} else {
-				new AlertDialog.Builder(this)
-						.setIcon(R.drawable.ic_launcher)
-						.setTitle(
-								"[" + file.getName()
-										+ "] folder can't be read!")
-						.setPositiveButton("OK",
-								new DialogInterface.OnClickListener() {
+		boolean multiSelect = isMultiSelected();
+		if (multiSelect) {
+			addMultiPosition(position, file.getPath());
+		} else {
+			if (file.isDirectory()) {
+				if (file.canRead()) {
+					try {
+						getDirection(link);
+					} catch (Exception e) {
+					}
+				} else {
+					new AlertDialog.Builder(this)
+							.setIcon(R.drawable.ic_launcher)
+							.setTitle(
+									"[" + file.getName()
+											+ "] folder can't be read!")
+							.setPositiveButton("OK",
+									new DialogInterface.OnClickListener() {
 
-									@Override
+										@Override
+										public void onClick(
+												DialogInterface dialog,
+												int which) {
+										}
+									}).show();
+				}
+			} else if (file.getName().endsWith(".jpeg")
+					|| file.getName().endsWith(".jpg")
+					|| file.getName().endsWith(".png")
+					|| file.getName().endsWith(".gif")
+					|| file.getName().endsWith(".tiff")
+					|| file.getName().endsWith(".JPEG")
+					|| file.getName().endsWith(".JPG")
+					|| file.getName().endsWith(".PNG")
+					|| file.getName().endsWith(".GIF")
+					|| file.getName().endsWith(".TIFF")) {
+				if (file.exists()) {
+					if (mReturnIntent) {
+						returnIntentResults(file);
+					} else {
+						Intent picIntent = new Intent();
+						picIntent.setAction(android.content.Intent.ACTION_VIEW);
+						picIntent.setDataAndType(Uri.fromFile(file), "image/*");
+						startActivity(picIntent);
+					}
+				}
+			} else if (file.getName().endsWith("3gp")
+					|| file.getName().endsWith("m4v")
+					|| file.getName().endsWith("ogg")
+					|| file.getName().endsWith("wmv")
+					|| file.getName().endsWith("mp4")
+					|| file.getName().endsWith("3GP")
+					|| file.getName().endsWith("M4V")
+					|| file.getName().endsWith("WMV")
+					|| file.getName().endsWith("MP4")
+					|| file.getName().endsWith("OGG")) {
+				if (file.exists()) {
+					if (mReturnIntent) {
+						returnIntentResults(file);
+					} else {
+						Intent movieIntent = new Intent();
+						movieIntent
+								.setAction(android.content.Intent.ACTION_VIEW);
+						movieIntent.setDataAndType(Uri.fromFile(file),
+								"video/*");
+						startActivity(movieIntent);
+					}
+				}
+			} else if (file.getName().endsWith("pdf")
+					|| file.getName().endsWith("PDF")) {
+				if (file.exists()) {
+					if (mReturnIntent) {
+						returnIntentResults(file);
+					} else {
+						Intent pdfIntent = new Intent();
+						pdfIntent.setAction(android.content.Intent.ACTION_VIEW);
+						pdfIntent.setDataAndType(Uri.fromFile(file),
+								"application/pdf");
+						try {
+							startActivity(pdfIntent);
+						} catch (ActivityNotFoundException e) {
+							Toast.makeText(this,
+									"Sorry, couldn't find a pdf viewer",
+									Toast.LENGTH_SHORT).show();
+						}
+					}
+				}
+			} else if (file.getName().endsWith("apk")
+					|| file.getName().endsWith("APK")) {
+				if (file.exists()) {
+					if (mReturnIntent) {
+						returnIntentResults(file);
+					} else {
+						Intent apkIntent = new Intent();
+						apkIntent.setAction(android.content.Intent.ACTION_VIEW);
+						apkIntent.setDataAndType(Uri.fromFile(file),
+								"application/vnd.android.package-archive");
+						startActivity(apkIntent);
+					}
+				}
+			} else if (file.getName().endsWith("html")
+					|| file.getName().endsWith("HTML")) {
+				if (file.exists()) {
+					if (mReturnIntent) {
+						returnIntentResults(file);
+					} else {
+						Intent htmlIntent = new Intent();
+						htmlIntent
+								.setAction(android.content.Intent.ACTION_VIEW);
+						htmlIntent.setDataAndType(Uri.fromFile(file),
+								"text/html");
+						try {
+							startActivity(htmlIntent);
+						} catch (ActivityNotFoundException e) {
+							Toast.makeText(this,
+									"Sorry, couldn't find a HTML viewer",
+									Toast.LENGTH_SHORT).show();
+						}
+					}
+				}
+			} else if (file.getName().endsWith("mp3")
+					|| file.getName().endsWith("wma")
+					|| file.getName().endsWith("acc")
+					|| file.getName().endsWith("mid")
+					|| file.getName().endsWith("flac")
+					|| file.getName().endsWith("wav")
+					|| file.getName().endsWith("ape")
+					|| file.getName().endsWith("MP3")
+					|| file.getName().endsWith("WMA")
+					|| file.getName().endsWith("ACC")
+					|| file.getName().endsWith("MID")
+					|| file.getName().endsWith("FLAC")
+					|| file.getName().endsWith("WAV")
+					|| file.getName().endsWith("APE")) {
+				if (file.exists()) {
+					if (mReturnIntent) {
+						returnIntentResults(file);
+					} else {
+						Intent audio = new Intent();
+						audio.setAction(android.content.Intent.ACTION_VIEW);
+						// audio.setAction(android.content.Intent.ACTION_PICK);
+						audio.setDataAndType(Uri.fromFile(file), "audio/*");
+						// audio.setComponent(new
+						// ComponentName("musicplayer.main",
+						// "musicplayer.main.MainPlayer"));
+						try {
+							startActivity(audio);
+						} catch (Exception e) {
+							Toast.makeText(this, "Sorry, couldn't  open file",
+									Toast.LENGTH_SHORT).show();
+						}
+					}
+				}
+			} else if (file.getName().endsWith("txt")
+					|| file.getName().endsWith("TXT")) {
+				if (file.exists()) {
+					if (mReturnIntent) {
+						returnIntentResults(file);
+					} else {
+						Intent txtIntent = new Intent();
+						txtIntent.setAction(android.content.Intent.ACTION_VIEW);
+						txtIntent.setDataAndType(Uri.fromFile(file),
+								"text/plain");
+						try {
+							startActivity(txtIntent);
+						} catch (ActivityNotFoundException e) {
+							txtIntent.setType("text/*");
+							startActivity(txtIntent);
+						}
+					}
+				}
+			} else if (file.getName().endsWith("zip")
+					|| file.getName().endsWith("ZIP")) {
+				if (file.exists()) {
+					if (mReturnIntent) {
+						returnIntentResults(file);
+					} else {
+						AlertDialog.Builder builder = new AlertDialog.Builder(
+								this);
+						AlertDialog alert;
+						CharSequence[] option = { "Extract here",
+								"Extract to..." };
+						builder.setTitle("Extract");
+						builder.setItems(option,
+								new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog,
 											int which) {
-									}
-								}).show();
-			}
-		} else if (file.getName().endsWith(".jpeg")
-				|| file.getName().endsWith(".jpg")
-				|| file.getName().endsWith(".png")
-				|| file.getName().endsWith(".gif")
-				|| file.getName().endsWith(".tiff")
-				|| file.getName().endsWith(".JPEG")
-				|| file.getName().endsWith(".JPG")
-				|| file.getName().endsWith(".PNG")
-				|| file.getName().endsWith(".GIF")
-				|| file.getName().endsWith(".TIFF")) {
-			if (file.exists()) {
-				if (mReturnIntent) {
-					returnIntentResults(file);
-				} else {
-					Intent picIntent = new Intent();
-					picIntent.setAction(android.content.Intent.ACTION_VIEW);
-					picIntent.setDataAndType(Uri.fromFile(file), "image/*");
-					startActivity(picIntent);
-				}
-			}
-		} else if (file.getName().endsWith("3gp")
-				|| file.getName().endsWith("m4v")
-				|| file.getName().endsWith("ogg")
-				|| file.getName().endsWith("wmv")
-				|| file.getName().endsWith("mp4")
-				|| file.getName().endsWith("3GP")
-				|| file.getName().endsWith("M4V")
-				|| file.getName().endsWith("WMV")
-				|| file.getName().endsWith("MP4")
-				|| file.getName().endsWith("OGG")) {
-			if (file.exists()) {
-				if (mReturnIntent) {
-					returnIntentResults(file);
-				} else {
-					Intent movieIntent = new Intent();
-					movieIntent.setAction(android.content.Intent.ACTION_VIEW);
-					movieIntent.setDataAndType(Uri.fromFile(file), "video/*");
-					startActivity(movieIntent);
-				}
-			}
-		} else if (file.getName().endsWith("pdf")
-				|| file.getName().endsWith("PDF")) {
-			if (file.exists()) {
-				if (mReturnIntent) {
-					returnIntentResults(file);
-				} else {
-					Intent pdfIntent = new Intent();
-					pdfIntent.setAction(android.content.Intent.ACTION_VIEW);
-					pdfIntent.setDataAndType(Uri.fromFile(file),
-							"application/pdf");
-					try {
-						startActivity(pdfIntent);
-					} catch (ActivityNotFoundException e) {
-						Toast.makeText(this,
-								"Sorry, couldn't find a pdf viewer",
-								Toast.LENGTH_SHORT).show();
-					}
-				}
-			}
-		} else if (file.getName().endsWith("apk")
-				|| file.getName().endsWith("APK")) {
-			if (file.exists()) {
-				if (mReturnIntent) {
-					returnIntentResults(file);
-				} else {
-					Intent apkIntent = new Intent();
-					apkIntent.setAction(android.content.Intent.ACTION_VIEW);
-					apkIntent.setDataAndType(Uri.fromFile(file),
-							"application/vnd.android.package-archive");
-					startActivity(apkIntent);
-				}
-			}
-		} else if (file.getName().endsWith("html")
-				|| file.getName().endsWith("HTML")) {
-			if (file.exists()) {
-				if (mReturnIntent) {
-					returnIntentResults(file);
-				} else {
-					Intent htmlIntent = new Intent();
-					htmlIntent.setAction(android.content.Intent.ACTION_VIEW);
-					htmlIntent.setDataAndType(Uri.fromFile(file), "text/html");
-					try {
-						startActivity(htmlIntent);
-					} catch (ActivityNotFoundException e) {
-						Toast.makeText(this,
-								"Sorry, couldn't find a HTML viewer",
-								Toast.LENGTH_SHORT).show();
-					}
-				}
-			}
-		} else if (file.getName().endsWith("mp3")
-				|| file.getName().endsWith("wma")
-				|| file.getName().endsWith("acc")
-				|| file.getName().endsWith("mid")
-				|| file.getName().endsWith("flac")
-				|| file.getName().endsWith("wav")
-				|| file.getName().endsWith("ape")
-				|| file.getName().endsWith("MP3")
-				|| file.getName().endsWith("WMA")
-				|| file.getName().endsWith("ACC")
-				|| file.getName().endsWith("MID")
-				|| file.getName().endsWith("FLAC")
-				|| file.getName().endsWith("WAV")
-				|| file.getName().endsWith("APE")) {
-			if (file.exists()) {
-				if (mReturnIntent) {
-					returnIntentResults(file);
-				} else {
-					Intent audio = new Intent();
-					audio.setAction(android.content.Intent.ACTION_VIEW);
-					// audio.setAction(android.content.Intent.ACTION_PICK);
-					audio.setDataAndType(Uri.fromFile(file), "audio/*");
-					// audio.setComponent(new ComponentName("musicplayer.main",
-					// "musicplayer.main.MainPlayer"));
-					try {
-						startActivity(audio);
-					} catch (Exception e) {
-						Toast.makeText(this, "Sorry, couldn't  open file",
-								Toast.LENGTH_SHORT).show();
-					}
-				}
-			}
-		} else if (file.getName().endsWith("txt")
-				|| file.getName().endsWith("TXT")) {
-			if (file.exists()) {
-				if (mReturnIntent) {
-					returnIntentResults(file);
-				} else {
-					Intent txtIntent = new Intent();
-					txtIntent.setAction(android.content.Intent.ACTION_VIEW);
-					txtIntent.setDataAndType(Uri.fromFile(file), "text/plain");
-					try {
-						startActivity(txtIntent);
-					} catch (ActivityNotFoundException e) {
-						txtIntent.setType("text/*");
-						startActivity(txtIntent);
-					}
-				}
-			}
-		} else if (file.getName().endsWith("zip")
-				|| file.getName().endsWith("ZIP")) {
-			if (file.exists()) {
-				if (mReturnIntent) {
-					returnIntentResults(file);
-				} else {
-					AlertDialog.Builder builder = new AlertDialog.Builder(this);
-					AlertDialog alert;
-					CharSequence[] option = { "Extract here", "Extract to..." };
-					builder.setTitle("Extract");
-					builder.setItems(option,
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int which) {
-									switch (which) {
-									case 0:
-										unZipFile(file.getName(), myPath
-												.getText().toString());
-										break;
+										switch (which) {
+										case 0:
+											unZipFile(file.getName(), myPath
+													.getText().toString());
+											break;
 
-									case 1:
-										dialogextractTo(file.getName(), myPath
-												.getText().toString());
-										break;
+										case 1:
+											dialogextractTo(file.getName(),
+													myPath.getText().toString());
+											break;
+										}
 									}
-								}
-							});
-					alert = builder.create();
-					alert.show();
+								});
+						alert = builder.create();
+						alert.show();
+					}
 				}
-			}
-		} else {
-			if (file.exists()) {
-				if (mReturnIntent) {
-					returnIntentResults(file);
-				} else {
-					Intent generic = new Intent();
-					generic.setAction(android.content.Intent.ACTION_VIEW);
-					generic.setDataAndType(Uri.fromFile(file), "text/plain");
-					try {
-						startActivity(generic);
-					} catch (ActivityNotFoundException e) {
-						Toast.makeText(
-								this,
-								"Sorry, couldn't find anything " + "to open "
-										+ file.getName(), Toast.LENGTH_SHORT)
-								.show();
+			} else {
+				if (file.exists()) {
+					if (mReturnIntent) {
+						returnIntentResults(file);
+					} else {
+						Intent generic = new Intent();
+						generic.setAction(android.content.Intent.ACTION_VIEW);
+						generic.setDataAndType(Uri.fromFile(file), "text/plain");
+						try {
+							startActivity(generic);
+						} catch (ActivityNotFoundException e) {
+							Toast.makeText(
+									this,
+									"Sorry, couldn't find anything "
+											+ "to open " + file.getName(),
+									Toast.LENGTH_SHORT).show();
+						}
 					}
 				}
 			}
@@ -542,41 +647,38 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.imvHelp:
-			Intent in = new Intent(this, Help.class);
-			startActivity(in);
-			break;
-		case R.id.imvSetting:
-			file = new File(myPath.getText().toString());
-			control = new ArrayList<String>();
-			control.add("New folder");
-			control.add("Paste");
-			dialogControl();
-			controlAdapter.notifyDataSetChanged();
-
-			break;
-		case R.id.imvAbout:
-			about();
-			break;
-		case R.id.imvInfo:
+		// case R.id.imvSetting:
+		// file = new File(myPath.getText().toString());
+		// control = new ArrayList<String>();
+		// control.add("New folder");
+		// control.add("Paste");
+		// dialogControl();
+		// controlAdapter.notifyDataSetChanged();
+		//
+		// break;
+		case R.id.imvInforDisk:
 			Intent intent = new Intent(this, InforDirectory.class);
 			intent.putExtra("PATH_NAME", myPath.getText().toString());
 			System.out.println("Info=" + myPath.getText().toString());
 			startActivity(intent);
 			break;
 		case R.id.imvManager:
-			Intent settings_int = new Intent(this, Setting.class);
-			settings_int.putExtra("HIDDEN",
-					mSettings.getBoolean(PREFS_HIDDEN, false));
-			settings_int.putExtra("THUMBNAIL",
-					mSettings.getBoolean(PREFS_THUMBNAIL, true));
-			settings_int.putExtra("COLOR", mSettings.getInt(PREFS_COLOR, -1));
-			settings_int.putExtra("SORT", mSettings.getInt(PREFS_THEME, 0));
-			// settings_int.putExtra("SPACE",
-			// mSettings.getInt(PREFS_STORAGE, View.VISIBLE));
-			startActivityForResult(settings_int, SETTING_REQ);
+			// Intent settings_int = new Intent(this, Setting.class);
+			// settings_int.putExtra("HIDDEN",
+			// mSettings.getBoolean(PREFS_HIDDEN, false));
+			// settings_int.putExtra("THUMBNAIL",
+			// mSettings.getBoolean(PREFS_THUMBNAIL, true));
+			// settings_int.putExtra("COLOR", mSettings.getInt(PREFS_COLOR,
+			// -1));
+			// settings_int.putExtra("SORT", mSettings.getInt(PREFS_THEME, 0));
+			// // settings_int.putExtra("SPACE",
+			// // mSettings.getInt(PREFS_STORAGE, View.VISIBLE));
+			// startActivityForResult(settings_int, SETTING_REQ);
+			HSV.setVisibility(View.GONE);
+			HSV2.setVisibility(View.GONE);
+			HSV3.setVisibility(View.VISIBLE);
 			break;
-		case R.id.imvPaste:
+		case R.id.imvMutil:
 			// String s = myPath.getText().toString();
 			// if (flag == true) {
 			// if (f.renameTo(new File(s + "/" + f.getName()))) {
@@ -599,21 +701,27 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 			// paste.setImageResource(R.drawable.pastepr);
 			// getDirection(myPath.getText().toString());
 			// }
-			file = new File(myPath.getText().toString());
-			control = new ArrayList<String>();
-			control.add("New folder");
-			control.add("Paste");
-			dialogControl();
-			controlAdapter.notifyDataSetChanged();
+			// file = new File(myPath.getText().toString());
+			// control = new ArrayList<String>();
+			// control.add("New folder");
+			// control.add("Paste");
+			// dialogControl();
+			// controlAdapter.notifyDataSetChanged();
+			if (multi_select_flag) {
+				killMultiSelect(true);
+			} else {
+				multi_select_flag = true;
+			}
+			HSV.setVisibility(View.GONE);
+			HSV2.setVisibility(View.VISIBLE);
 			break;
-		case R.id.imvSort:
-			// dialogSort();
+		case R.id.imvBackUpApp:
 			Intent startBackup = new Intent(this, ApplicationBackup.class);
 			startActivity(startBackup);
 			break;
-		case R.id.imvNew:
-			file = new File(myPath.getText().toString());
-			creatNewfolder();
+		case R.id.imvInforApp:
+			Intent infoApp = new Intent(this, ProcessManager.class);
+			startActivity(infoApp);
 			break;
 		case R.id.imvSearch:
 			dialogSearch();
@@ -625,7 +733,6 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 			try {
 				File f = new File(myPath.getText().toString());
 				getDirection(f.getParent());
-				isAnimation = false;
 			} catch (Exception e) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(
 						ExplorerActivity.this);
@@ -656,6 +763,99 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 			break;
 		case R.id.imvView:
 			viewChid();
+			break;
+		case R.id.imvBackHome:
+			if (multi_select_flag) {
+				killMultiSelect(true);
+				Toast.makeText(mContext, "Multi-select is now off",
+						Toast.LENGTH_SHORT).show();
+			}
+			HSV.setVisibility(View.VISIBLE);
+			HSV2.setVisibility(View.GONE);
+			HSV3.setVisibility(View.GONE);
+			break;
+		case R.id.imvBackHome2:
+			HSV.setVisibility(View.VISIBLE);
+			HSV2.setVisibility(View.GONE);
+			HSV3.setVisibility(View.GONE);
+			break;
+		case R.id.imvMutil2:
+			if (mMultiSelectData == null || mMultiSelectData.isEmpty()) {
+				killMultiSelect(true);
+				break;
+			}
+
+			ArrayList<Uri> uris = new ArrayList<Uri>();
+			int length = mMultiSelectData.size();
+			Intent mail_int = new Intent();
+
+			mail_int.setAction(android.content.Intent.ACTION_SEND_MULTIPLE);
+			mail_int.setType("application/mail");
+			mail_int.putExtra(Intent.EXTRA_BCC, "");
+			mail_int.putExtra(Intent.EXTRA_SUBJECT, " ");
+
+			for (int i = 0; i < length; i++) {
+				File file = new File(mMultiSelectData.get(i));
+				uris.add(Uri.fromFile(file));
+			}
+
+			mail_int.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+			mContext.startActivity(Intent.createChooser(mail_int,
+					"Email using..."));
+
+			killMultiSelect(true);
+			break;
+		case R.id.imvCopy:
+			if (mMultiSelectData == null || mMultiSelectData.isEmpty()) {
+				killMultiSelect(true);
+				break;
+			}
+
+			Toast.makeText(getApplicationContext(),
+					"Holding " + mMultiSelectData.size() + " file(s)",
+					Toast.LENGTH_SHORT).show();
+			killMultiSelect(false);
+			break;
+		case R.id.imvCut:
+			delete_after_copy = true;
+			break;
+		case R.id.imvPaste:
+			break;
+		case R.id.imvDelete:
+			if (mMultiSelectData == null || mMultiSelectData.isEmpty()) {
+				killMultiSelect(true);
+				break;
+			}
+
+			final String[] data = new String[mMultiSelectData.size()];
+			int at = 0;
+
+			for (String string : mMultiSelectData)
+				data[at++] = string;
+
+			AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+			builder.setMessage("Are you sure you want to delete " + data.length
+					+ " files? This cannot be " + "undone.");
+			builder.setCancelable(false);
+			builder.setPositiveButton("Delete",
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							new Background(DELETE).execute(data);
+							killMultiSelect(true);
+						}
+					});
+			builder.setNegativeButton("Cancel",
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							killMultiSelect(true);
+							dialog.cancel();
+						}
+					});
+
+			builder.create().show();
+			break;
 		default:
 			break;
 		}
@@ -669,11 +869,15 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 		mShowHiddenFiles = choice;
 	}
 
-	public void getDirection(String s) {
+	public void getDirection(final String s) {
 		// SharedPreferences.Editor editor = mSettings.edit();
 		// isAnimation = true;
 		// editor.putBoolean(PREFS_ANIM, isAnimation);
 		// editor.commit();
+		// if (mThumbnail == null) {
+		// System.out.println("thumbnail");
+		// mThumbnail = new ThumbnailCreator(52, 52);
+		// }
 		File f = new File(s);
 		myPath.setText(s);
 		listFileFolder = new ArrayList<FileFolder>();
@@ -684,7 +888,6 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 			listFileName.add(files[i].getName());
 			File file = files[i];
 			if (file.isDirectory()) {
-
 				if (!mShowHiddenFiles) {
 					if (file.getName().charAt(0) != '.') {
 						fileFolder = new FileFolder(R.drawable.folder_snow,
@@ -714,26 +917,30 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 						|| file.getName().endsWith(".PNG")
 						|| file.getName().endsWith(".GIF")
 						|| file.getName().endsWith(".TIFF")) {
-					if (mThumbnail == null) {
-						mThumbnail = new ThumbnailCreator(52, 52);
-					}
+					System.out.println("1");
+
 					if (thumbnail_flag && file.length() != 0) {
 						Bitmap thumb = mThumbnail
 								.isBitmapCached(file.getPath());
+						System.out.println("2");
 						if (thumb == null) {
 							final Handler handle = new Handler(
 									new Handler.Callback() {
 										public boolean handleMessage(Message msg) {
 											adapter.notifyDataSetChanged();
+											adapterListView
+													.notifyDataSetChanged();
 											return true;
 										}
 									});
 							mThumbnail.createNewThumbnail(listFileName, s,
 									handle);
+							System.out.println("4");
+
 							if (!mThumbnail.isAlive())
 								mThumbnail.start();
 						} else {
-
+							System.out.println("5");
 							fileFolder = new FileFolder(thumb, file.getName(),
 									file.length(), file.lastModified());
 							listFileFolder.add(fileFolder);
@@ -742,9 +949,9 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 						fileFolder = new FileFolder(R.drawable.image_browser,
 								file.getName(), file.length(),
 								file.lastModified());
+						System.out.println("6");
 						listFileFolder.add(fileFolder);
 					}
-
 				} else if (file.getName().endsWith("3gp")
 						|| file.getName().endsWith("m4v")
 						|| file.getName().endsWith("ogg")
@@ -802,16 +1009,16 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 				} else if (file.getName().endsWith("apk")
 						|| file.getName().endsWith("APK")) {
 					String filePath = file.getPath();
-					PackageInfo packageInfo = this.getPackageManager()
-							.getPackageArchiveInfo(filePath,
-									PackageManager.GET_ACTIVITIES);
+					PackageInfo packageInfo = ExplorerActivity.this
+							.getPackageManager().getPackageArchiveInfo(
+									filePath, PackageManager.GET_ACTIVITIES);
 					if (packageInfo != null) {
 						ApplicationInfo appInfo = packageInfo.applicationInfo;
 						if (Build.VERSION.SDK_INT >= 8) {
 							appInfo.sourceDir = filePath;
 							appInfo.publicSourceDir = filePath;
 						}
-						Drawable icon = appInfo.loadIcon(this
+						Drawable icon = appInfo.loadIcon(ExplorerActivity.this
 								.getPackageManager());
 						Bitmap bmpIcon = ((BitmapDrawable) icon).getBitmap();
 					}
@@ -856,28 +1063,28 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 				R.layout.item_listview, listFileFolder);
 		adapterListView.setTextColor(color);
 		switch (sx) {
+		case 0:
+			adapter.sort(new Comparator<FileFolder>() {
+				@Override
+				public int compare(FileFolder lhs, FileFolder rhs) {
+					return lhs.getName().compareTo(rhs.getName());
+				}
+			});
+			adapterListView.sort(new Comparator<FileFolder>() {
+				@Override
+				public int compare(FileFolder lhs, FileFolder rhs) {
+					return lhs.getName().compareTo(rhs.getName());
+				}
+			});
+			adapter.notifyDataSetChanged();
+			adapterListView.notifyDataSetChanged();
+			list.setAdapter(adapter);
+			listView.setAdapter(adapterListView);
+			break;
 		case 1:
 			adapter.sort(new Comparator<FileFolder>() {
 				@Override
 				public int compare(FileFolder lhs, FileFolder rhs) {
-					return lhs.getName().compareTo(rhs.getName());
-				}
-			});
-			adapterListView.sort(new Comparator<FileFolder>() {
-				@Override
-				public int compare(FileFolder lhs, FileFolder rhs) {
-					return lhs.getName().compareTo(rhs.getName());
-				}
-			});
-			adapter.notifyDataSetChanged();
-			adapterListView.notifyDataSetChanged();
-			list.setAdapter(adapter);
-			listView.setAdapter(adapterListView);
-			break;
-		case 2:
-			adapter.sort(new Comparator<FileFolder>() {
-				@Override
-				public int compare(FileFolder lhs, FileFolder rhs) {
 					return new Double(lhs.getLength()).compareTo(rhs
 							.getLength());
 				}
@@ -889,19 +1096,19 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 							.getLength());
 				}
 			});
-			adapter.notifyDataSetChanged();
-			adapterListView.notifyDataSetChanged();
-			list.setAdapter(adapter);
-			listView.setAdapter(adapterListView);
-			break;
-		case 4:
-			Collections.sort(listFileFolder, new sxType());
 			adapter.notifyDataSetChanged();
 			adapterListView.notifyDataSetChanged();
 			list.setAdapter(adapter);
 			listView.setAdapter(adapterListView);
 			break;
 		case 3:
+			Collections.sort(listFileFolder, new sxType());
+			adapter.notifyDataSetChanged();
+			adapterListView.notifyDataSetChanged();
+			list.setAdapter(adapter);
+			listView.setAdapter(adapterListView);
+			break;
+		case 2:
 			adapter.sort(new Comparator<FileFolder>() {
 				@Override
 				public int compare(FileFolder lhs, FileFolder rhs) {
@@ -1114,7 +1321,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 			list.setVisibility(View.GONE);
 			listView.setVisibility(View.VISIBLE);
 			listView.setAdapter(adapterListView);
-			view.setImageResource(R.drawable.listt);
+			view.setImageResource(R.drawable.toolbar_mode_icon);
 			editor.putBoolean(PREFS_VIEW, displayView);
 			editor.commit();
 			displayView = false;
@@ -1125,7 +1332,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 			list.setVisibility(View.VISIBLE);
 			editor.putBoolean(PREFS_VIEW, displayView);
 			editor.commit();
-			view.setImageResource(R.drawable.list);
+			view.setImageResource(R.drawable.toolbar_mode_list);
 			displayView = true;
 		}
 	}
@@ -1320,6 +1527,19 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 	public void copyFile(String oldLocation, String newLocation) {
 		String[] data = { oldLocation, newLocation };
 		new Background(COPY).execute(data);
+	}
+
+	public void copyFileMultiSelect(String newLocation) {
+		String[] data;
+		int index = 1;
+
+		if (mMultiSelectData.size() > 0) {
+			data = new String[mMultiSelectData.size() + 1];
+			data[0] = newLocation;
+			for (String s : mMultiSelectData)
+				data[index++] = s;
+			new Background(COPY_TYPE).execute(data);
+		}
 	}
 
 	public void zip_file(String path) {
@@ -1580,22 +1800,18 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 		case THEME_HIGHTLAND:
 			theme.setBackgroundResource(R.drawable.background);
 			rlcontrol.setBackgroundColor(Color.TRANSPARENT);
-			rlLocal.setBackgroundResource(android.R.drawable.edit_text);
 			break;
 		case THEME_ANGEL:
 			theme.setBackgroundResource(R.drawable.angel);
 			rlcontrol.setBackgroundColor(Color.TRANSPARENT);
-			rlLocal.setBackgroundColor(Color.TRANSPARENT);
 			break;
 		case THEME_ROMANCE:
 			theme.setBackgroundResource(R.drawable.romance);
 			rlcontrol.setBackgroundColor(Color.TRANSPARENT);
-			rlLocal.setBackgroundColor(Color.TRANSPARENT);
 			break;
 		case THEME_GIRL:
 			theme.setBackgroundResource(R.drawable.tamt);
 			rlcontrol.setBackgroundColor(Color.TRANSPARENT);
-			rlLocal.setBackgroundColor(Color.TRANSPARENT);
 			break;
 		}
 	}
@@ -1609,6 +1825,62 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 
 	public void setShowThumbnails(boolean show) {
 		thumbnail_flag = show;
+	}
+
+	/************************ Mutil Selected **************************************/
+	public boolean isMultiSelected() {
+		return multi_select_flag;
+	}
+
+	public boolean hasMultiSelectData() {
+		return (mMultiSelectData != null && mMultiSelectData.size() > 0);
+	}
+
+	public ArrayList<Integer> positions;
+
+	public void addMultiPosition(int index, String path) {
+		if (positions == null)
+			positions = new ArrayList<Integer>();
+
+		if (mMultiSelectData == null) {
+			positions.add(index);
+			add_multiSelect_file(path);
+
+		} else if (mMultiSelectData.contains(path)) {
+			if (positions.contains(index))
+				positions.remove(new Integer(index));
+			mMultiSelectData.remove(path);
+
+		} else {
+			positions.add(index);
+			add_multiSelect_file(path);
+		}
+		adapter.notifyDataSetChanged();
+		adapterListView.notifyDataSetChanged();
+	}
+
+	public void killMultiSelect(boolean clearData) {
+		// hidden_layout = (LinearLayout) ((Activity) mContext)
+		// .findViewById(R.id.hidden_buttons);
+		// hidden_layout.setVisibility(LinearLayout.GONE);
+		multi_select_flag = false;
+
+		if (positions != null && !positions.isEmpty())
+			positions.clear();
+
+		if (clearData)
+			if (mMultiSelectData != null && !mMultiSelectData.isEmpty())
+				mMultiSelectData.clear();
+
+		adapter.notifyDataSetChanged();
+		adapterListView.notifyDataSetChanged();
+	}
+
+	private void add_multiSelect_file(String src) {
+		if (mMultiSelectData == null)
+			mMultiSelectData = new ArrayList<String>();
+
+		mMultiSelectData.add(src);
 	}
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1633,6 +1905,10 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 						"Searching current file system...", true, true);
 				break;
 			case COPY:
+				pr_dialog = ProgressDialog.show(mContext, "Copying",
+						"Copying file...", true, false);
+				break;
+			case COPY_TYPE:
 				pr_dialog = ProgressDialog.show(mContext, "Copying",
 						"Copying file...", true, false);
 				break;
@@ -1668,6 +1944,25 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 				return found;
 			case COPY:
 				copyDir = copyToDirectory(params[0], params[1]);
+				return null;
+			case COPY_TYPE:
+				int len = params.length;
+
+				if (mMultiSelectData != null && !mMultiSelectData.isEmpty()) {
+					for (int i = 1; i < len; i++) {
+						copy_rtn = copyToDirectory(params[i], params[0]);
+
+						if (delete_after_copy)
+							deleteTarget(params[i]);
+					}
+				} else {
+					copy_rtn = copyToDirectory(params[0], params[1]);
+
+					if (delete_after_copy)
+						deleteTarget(params[0]);
+				}
+
+				delete_after_copy = false;
 				return null;
 			case UNZIP:
 				extractZipFiles(params[0], params[1]);
@@ -1743,7 +2038,27 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 				}
 				pr_dialog.dismiss();
 				break;
+			case COPY_TYPE:
+				if (mMultiSelectData != null && !mMultiSelectData.isEmpty()) {
+					multi_select_flag = false;
+					mMultiSelectData.clear();
+				}
+
+				if (copy_rtn == 0)
+					Toast.makeText(mContext,
+							"File successfully copied and pasted",
+							Toast.LENGTH_SHORT).show();
+				else
+					Toast.makeText(mContext, "Copy pasted failed",
+							Toast.LENGTH_SHORT).show();
+
+				pr_dialog.dismiss();
+				break;
 			case DELETE:
+				if (mMultiSelectData != null && !mMultiSelectData.isEmpty()) {
+					mMultiSelectData.clear();
+					multi_select_flag = false;
+				}
 				getDirection(myPath.getText().toString());
 				pr_dialog.dismiss();
 				break;

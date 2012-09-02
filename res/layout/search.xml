@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp" >
+
+    <TextView
+        android:id="@+id/tvSearchFileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/etSearchFileName"
+        android:text="File name"
+        android:textSize="18dp" />
+
+    <EditText
+        android:id="@+id/etSearchFileName"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="3dp"
+        android:textSize="18dp"
+        android:hint="Input file name" />
+
+    <RelativeLayout
+        android:id="@+id/rlSpin1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etSearchFileName" >
+
+        <Spinner
+            android:id="@+id/spinerPath"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/etSearchFileName"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/etSearchFileName"
+            android:drawSelectorOnTop="true"
+            android:prompt="@string/planet_prompt" />
+
+        <TextView
+            android:id="@+id/tvSearchPath"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/etSearchFileName"
+            android:layout_centerVertical="true"
+            android:text="Path"
+            android:textSize="18dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlSpin2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rlSpin1" >
+
+        <Spinner
+            android:id="@+id/spinerCategory"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/etSearchFileName"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/spinerPath"
+            android:prompt="@string/category_prompt" />
+
+        <TextView
+            android:id="@+id/tvSearchCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/spinerPath"
+            android:layout_centerVertical="true"
+            android:text="Category"
+            android:textSize="18dp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/llSearch"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rlSpin2"
+        android:layout_marginTop="15dp"
+        android:background="@android:drawable/bottom_bar"
+        android:orientation="horizontal"
+        android:paddingBottom="1.0dip"
+        android:paddingLeft="4.0dip"
+        android:paddingRight="4.0dip"
+        android:paddingTop="5.0dip" >
+
+        <Button
+            android:id="@+id/btOKSearch"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:text="OK" />
+
+        <Button
+            android:id="@+id/btCancelSearch"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:text="Cancel" />
+    </LinearLayout>
+
+</RelativeLayout>

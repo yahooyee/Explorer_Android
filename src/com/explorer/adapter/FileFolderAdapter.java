@@ -22,6 +22,7 @@ public class FileFolderAdapter extends ArrayAdapter<FileFolder> {
 	Context context;
 	ArrayList<FileFolder> arrayList;
 	int resource;
+	ExplorerActivity activity = new ExplorerActivity();
 
 	public void setTextColor(int color) {
 		mColor = color;
@@ -49,11 +50,11 @@ public class FileFolderAdapter extends ArrayAdapter<FileFolder> {
 		imageView.setImageBitmap(fileFolder.getImvBitmap());
 		TextView name = (TextView) v.findViewById(R.id.tvItemName);
 		name.setText(fileFolder.getName());
-		name.setTextColor(mColor);
-		Animation animation = AnimationUtils.loadAnimation(getContext(),
-				R.anim.items_list);
-		if (ExplorerActivity.isAnimation == true) {
-			v.startAnimation(animation);
+		// name.setTextColor(mColor);
+		if (activity.positions!=null&&activity.positions.contains(position)) {
+			name.setTextColor(Color.BLUE);
+		} else {
+			name.setTextColor(mColor);
 		}
 		return v;
 	}

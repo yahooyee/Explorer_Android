@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/theme"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/w_base_frame"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/rlHSV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <HorizontalScrollView
+            android:id="@+id/HSVMutil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/rlURI"
+            android:layout_marginBottom="5dp"
+            android:paddingLeft="5dp"
+            android:scrollbars="none" >
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00000000" >
+
+                <RelativeLayout
+                    android:id="@+id/rlBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/grass" >
+
+                    <ImageView
+                        android:id="@+id/imvBackHome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/toolbar_back" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rlMutil2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/rlCut"
+                    android:background="@drawable/grass" >
+
+                    <ImageView
+                        android:id="@+id/imvMutil2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/toolbar_select_focus" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rlCopy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/rlBack"
+                    android:background="@drawable/grass" >
+
+                    <ImageView
+                        android:id="@+id/imvCopy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/toolbar_copy" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rlCut"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/rlCopy"
+                    android:background="@drawable/grass" >
+
+                    <ImageView
+                        android:id="@+id/imvCut"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/toolbar_cut" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rlPaste"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/rlMutil2"
+                    android:background="@drawable/grass" >
+
+                    <ImageView
+                        android:id="@+id/imvPaste"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/toolbar_paste" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rlDelete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/rlPaste"
+                    android:background="@drawable/grass" >
+
+                    <ImageView
+                        android:id="@+id/imvDelete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/toolbar_uninstall" />
+                </RelativeLayout>
+            </RelativeLayout>
+        </HorizontalScrollView>
+
+        <HorizontalScrollView
+            android:id="@+id/HSV3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:scrollbars="none" >
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00000000" >
+
+                <RelativeLayout
+                    android:id="@+id/rlBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/grass" >
+
+                    <ImageView
+                        android:id="@+id/imvBackHome2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/toolbar_back" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rlBackUpApp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/rlBack"
+                    android:background="@drawable/grass" >
+
+                    <ImageView
+                        android:id="@+id/imvBackUpApp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/toolbar_backup" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rlInfoApp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/rlBackUpApp"
+                    android:background="@drawable/grass" >
+
+                    <ImageView
+                        android:id="@+id/imvInforApp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/toolbar_allprograms" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rlInfoDisk"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/rlInfoApp"
+                    android:background="@drawable/grass" >
+
+                    <ImageView
+                        android:id="@+id/imvInforDisk"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/toolbar_disk_usage" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rlTaskKill"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/rlInfoDisk"
+                    android:background="@drawable/grass" >
+
+                    <ImageView
+                        android:id="@+id/imvTaskKill"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/toolbar_taskmanager" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rlUninstall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/rlTaskKill"
+                    android:background="@drawable/grass" >
+
+                    <ImageView
+                        android:id="@+id/imvUninStall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/toolbar_uninstall" />
+                </RelativeLayout>
+            </RelativeLayout>
+        </HorizontalScrollView>
+
+        <HorizontalScrollView
+            android:id="@+id/HSV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:scrollbars="none" >
+
+            <RelativeLayout
+                android:id="@+id/rlControl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00000000" >
+
+                <RelativeLayout
+                    android:id="@+id/rlHome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/grass" >
+
+                    <ImageView
+                        android:id="@+id/imvHome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/home" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rlUp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/rlHome"
+                    android:background="@drawable/grass" >
+
+                    <ImageView
+                        android:id="@+id/imvUp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/imvHome"
+                        android:src="@drawable/up" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rlSearch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/rlUp"
+                    android:background="@drawable/grass" >
+
+                    <ImageView
+                        android:id="@+id/imvSearch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/search" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rlMutil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/rlSearch"
+                    android:background="@drawable/grass" >
+
+                    <ImageView
+                        android:id="@+id/imvMutil"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/imvSearch"
+                        android:src="@drawable/pastepr" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rlManager"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/rlMutil"
+                    android:background="@drawable/grass" >
+
+                    <ImageView
+                        android:id="@+id/imvManager"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/imvMutil"
+                        android:src="@drawable/manager" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rlView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/rlManager"
+                    android:background="@drawable/grass" >
+
+                    <ImageView
+                        android:id="@+id/imvView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/imvManager"
+                        android:src="@drawable/listt" />
+                </RelativeLayout>
+
+                <!--
+            <RelativeLayout
+                android:id="@+id/rlSort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/rlView"
+                android:background="@drawable/grass" >
+
+                <ImageView
+                    android:id="@+id/imvSort"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/imvView"
+                    android:src="@drawable/sort" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/rlSort"
+                android:background="@drawable/grass" >
+
+                <ImageView
+                    android:id="@+id/imvInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/imvSort"
+                    android:src="@drawable/read" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlSetting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/rlInfo"
+                android:background="@drawable/grass" >
+
+                <ImageView
+                    android:id="@+id/imvSetting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/imvInfo"
+                    android:src="@drawable/set" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlHelp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/rlSetting"
+                android:background="@drawable/grass" >
+
+                <ImageView
+                    android:id="@+id/imvHelp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/imvSetting"
+                    android:src="@drawable/help" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlAbout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/rlHelp"
+                android:background="@drawable/grass" >
+
+                <ImageView
+                    android:id="@+id/imvAbout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/imvHelp"
+                    android:src="@drawable/about" />
+            </RelativeLayout>
+             <RelativeLayout
+                android:id="@+id/rlNew"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/rlAbout"
+                android:background="@drawable/grass" >
+
+                <ImageView
+                    android:id="@+id/imvNew"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/imvUp"
+                    android:src="@drawable/new_folder" />
+            </RelativeLayout>
+                -->
+            </RelativeLayout>
+        </HorizontalScrollView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlURI"
+        android:layout_width="fill_parent"
+        android:layout_height="26dp"
+        android:layout_below="@+id/rlHSV"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="3dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/addressbar_bg" >
+
+        <RelativeLayout
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp" >
+
+            <ImageView
+                android:id="@+id/imvFolderLocal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/addressbar_local" />
+
+            <TextView
+                android:id="@+id/tvURI"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:layout_toRightOf="@+id/imvFolderLocal"
+                android:maxLines="1"
+                android:text="/sdcard/"
+                android:textColor="#000" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/imvHistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/toolbar_history_bg" />
+    </RelativeLayout>
+
+    <GridView
+        android:id="@+id/listGrid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rlURI"
+        android:background="#00000000"
+        android:cacheColorHint="#00000000"
+        android:columnWidth="90dp"
+        android:listSelector="@drawable/toolbar_inner_focus"
+        android:numColumns="3"
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="3dp"
+        android:verticalSpacing="10dp" >
+    </GridView>
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rlURI"
+        android:addStatesFromChildren="false"
+        android:alwaysDrawnWithCache="true"
+        android:cacheColorHint="#00000000"
+        android:choiceMode="none"
+        android:divider="@null"
+        android:dividerHeight="10px"
+        android:duplicateParentState="true"
+        android:listSelector="#00000000"
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="3dp"
+        android:scrollbars="vertical"
+        android:scrollingCache="true" >
+    </ListView>
+
+</RelativeLayout>

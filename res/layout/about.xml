@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rlEnd"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_centerInParent="true"
+    android:paddingBottom="30dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp" >
+
+    <RelativeLayout
+        android:id="@+id/rlAn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:background="@drawable/small_bg" >
+
+        <TextView
+            android:id="@+id/tvTitleDialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="170dp"
+            android:text="AUTHOR"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvTitleDialog"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="5.5dp"
+            android:text="NGUYỄN HOÀNG TRƯỜNG"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/btPlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btSave"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="4dp"
+            android:text="Date of Birth: 20-02-1991"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvLop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btPlay"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="4dp"
+            android:text="[TQ]-PHIEUDIEU-D09CN2-PTIT"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvLop"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="4dp"
+            android:text="truongnguyenptit@gmail.com"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvYM"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvEmail"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="4dp"
+            android:text="Y!M: truongnguyennht"
+            android:textSize="16sp" />
+		<TextView 
+		    android:id="@+id/tvTel"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_below="@+id/tvYM"
+		    android:layout_centerHorizontal="true"
+		    android:layout_marginTop="4dp"
+		    android:text="TEL: 0974878244"
+		    android:textSize="16sp"/>
+        <Button
+            android:id="@+id/btClose"
+            android:layout_width="130dp"
+            android:layout_height="25dp"
+            android:layout_below="@+id/tvTel"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/button"
+            android:text="CLOSE"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+</RelativeLayout>

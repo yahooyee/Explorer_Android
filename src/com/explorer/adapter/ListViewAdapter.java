@@ -63,13 +63,8 @@ public class ListViewAdapter extends ArrayAdapter<FileFolder> {
 		Date d = new Date(fileFolder.getModified());
 		long year = d.getYear() + 1900;
 		date.setText(String.valueOf(d.getDate() + "/" + d.getMonth() + "/"
-				+ year + "  " + d.getHours() + ":" + d.getMinutes()));
+				+ year));
 		name.setTextColor(mColor);
-		Animation animation = AnimationUtils.loadAnimation(getContext(),
-				R.anim.items_list);
-		if (ExplorerActivity.isAnimation == true) {
-			v.startAnimation(animation);
-		}
 
 		/************** Tinh so byte, kb, mb,gb ****************/
 		double size = fileFolder.getLength();
