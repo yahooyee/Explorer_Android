@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/ll1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <com.google.ads.GoogleAdView
+                android:id="@+id/ll2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="top" >
+            </com.google.ads.GoogleAdView>
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/list1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </ListView>
+
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Truong"
+            android:textAppearance="@android:anim/accelerate_decelerate_interpolator"
+            android:textStyle="bold" >
+        </TextView>
+
+        <include layout="@+id/ll3" >
+        </include>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll4"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal" >
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0" >
+
+            <ListView
+                android:id="@+id/list2"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+            </ListView>
+
+            <TextView
+                android:id="@+id/tv2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:text="Truong"
+                android:textStyle="bold" >
+            </TextView>
+        </FrameLayout>
+    </LinearLayout>
+
+</FrameLayout>

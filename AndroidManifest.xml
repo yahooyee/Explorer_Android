@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.explorer"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk android:minSdkVersion="8" />
+
+    <application
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name" >
+        <activity
+            android:name=".ExplorerActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+ >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".InforDirectory"
+            android:enabled="true"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+ >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <data android:mimeType="application/manager" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Setting"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+>
+        </activity>
+        <activity
+            android:name=".Help"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+>
+        </activity>
+        <activity
+            android:name=".ApplicationBackup"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+>
+        </activity>
+        <activity
+            android:name=".ProcessManager"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+>
+        </activity>
+        <activity android:name=".taskmanager.TaskManager" >
+            <intent-filter>
+                <action android:name="android.intent.action.PICK_TASK_MANAGER" />
+
+                <category android:name="android.intent.category.DEFAULT" >
+                </category>
+            </intent-filter>
+        </activity>
+        <activity android:name=".taskmanager.IgnoreList" >
+            <intent-filter>
+                <action android:name="android.intent.action.TASK_MANAGER_IGNORE_LIST" >
+                </action>
+
+                <category android:name="android.intent.category.DEFAULT" >
+                </category>
+            </intent-filter>
+        </activity>
+        <activity android:name=".taskmanager.KillOnlyList" >
+            <intent-filter>
+                <action android:name="android.intent.action.TASK_MANAGER_KILLONLY_LIST" >
+                </action>
+
+                <category android:name="android.intent.category.DEFAULT" >
+                </category>
+            </intent-filter>
+        </activity>
+        <activity android:name=".taskmanager.PreferencesActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.TASKMANGER_SETTINGS" >
+                </action>
+
+                <category android:name="android.intent.category.DEFAULT" >
+                </category>
+            </intent-filter>
+        </activity>
+
+        <receiver android:name=".taskmanager.AutoStartReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" >
+                </action>
+
+                <category android:name="android.intent.category.DEFAULT" >
+                </category>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".taskmanager.TmWidgetProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" >
+                </action>
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".taskmanager.TmWidgetConfigure" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" >
+                </action>
+            </intent-filter>
+        </activity>
+        <activity android:name=".taskmanager.TmWidgetSetting" >
+        </activity>
+
+        <service android:name=".taskmanager.TmUpdateService" >
+        </service>
+
+        <receiver android:name=".taskmanager.TmKillAllReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.estrongs.taskmanager.killapp" >
+                </action>
+
+                <category android:name="android.intent.category.DEFAULT" >
+                </category>
+            </intent-filter>
+        </receiver>
+        <activity
+            android:name=".taskmanager.Test"/>
+    </application>
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RESTART_PACKAGES" >
+    </uses-permission>
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" >
+    </uses-permission>
+    <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.WAKE_LOCK" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" >
+    </uses-permission>
+    <uses-permission android:name="KILL_BACKGROUND_PROCESSES" >
+    </uses-permission>
+
+</manifest>

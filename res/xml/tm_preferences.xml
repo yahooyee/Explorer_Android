@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="Preference" >
+        <Preference
+            android:key="ignore_list"
+            android:persistent="false"
+            android:summary="Add app(launch, dialer, clock, music...) here avoid being killed by widget/ auto kill"
+            android:title="Ignore List" >
+            <intent android:action="android.intent.action.TASK_MANAGER_IGNORE_LIST" >
+            </intent>
+        </Preference>
+        <Preference
+            android:key="killonly_list"
+            android:persistent="false"
+            android:summary="Kill only the apps in this list if you set the widget to kill only"
+            android:title="Kill Only List" >
+            <intent android:action="android.intent.action.TASK_MANAGER_KILLONLY_LIST" >
+            </intent>
+        </Preference>
+
+        <PreferenceScreen
+            android:key="shortcuts"
+            android:summary="Put shortcuts(home, notification...)"
+            android:title="Shortcuts" >
+            <PreferenceCategory android:title="Shortcuts Settings" >
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="shortcut"
+                    android:persistent="true"
+                    android:title="Shortcut on Destop" >
+                </CheckBoxPreference>
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="stat_enabled"
+                    android:persistent="true"
+                    android:summary="Show notification on bar"
+                    android:title="Notification Bar Icon" >
+                </CheckBoxPreference>
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="auto_start"
+                    android:persistent="true"
+                    android:summary="Show notification bar icon on boot"
+                    android:title="Auto Start" >
+                </CheckBoxPreference>
+            </PreferenceCategory>
+        </PreferenceScreen>
+        <PreferenceScreen
+            android:key="advanced_setting"
+            android:summary="Set parameters(widget, display...)"
+            android:title="Advanced Settings" >
+            <PreferenceCategory android:title="Advanced Settings" >
+                <ListPreference
+                    android:defaultValue="0"
+                    android:key="operation"
+                    android:persistent="true"
+                    android:summary="Choose the operation when click the widget"
+                    android:title="Widget Operation" >
+                </ListPreference>
+
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="auto_kill"
+                    android:persistent="true"
+                    android:summary="Auto kill all processes except for IGNORE LIST when display is off"
+                    android:title="Widget Auto Kill" >
+                </CheckBoxPreference>
+
+                <ListPreference
+                    android:defaultValue="10000"
+                    android:key="refresh_time"
+                    android:persistent="true"
+                    android:summary="Refresh frequently costs battery"
+                    android:title="Widget Refresh Time" >
+                </ListPreference>
+            </PreferenceCategory>
+            <PreferenceCategory android:title="View Settings" >
+                <CheckBoxPreference
+                    android:defaultValue="true"
+                    android:key="show_battery"
+                    android:persistent="true"
+                    android:summary="How many battery "
+                    android:title="Show Battery Info" >
+                </CheckBoxPreference>
+                <CheckBoxPreference
+                    android:defaultValue="true"
+                    android:key="select_status"
+                    android:persistent="true"
+                    android:summary="Checks this to always remembers your previous selection"
+                    android:title="Remember Selection Status" >
+                </CheckBoxPreference>
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="show_mem"
+                    android:persistent="true"
+                    android:summary="Disable this option will greatly reduce refresh time"
+                    android:title="CPU/Memory Info" >
+                </CheckBoxPreference>
+            </PreferenceCategory>
+        </PreferenceScreen>
+        <PreferenceScreen
+            android:key="support"
+            android:summary="FAQ on the web"
+            android:title="Support" >
+            <Preference
+                android:key="faq"
+                android:title="FAQ" >
+            </Preference>
+        </PreferenceScreen>
+    </PreferenceCategory>
+
+</PreferenceScreen>
