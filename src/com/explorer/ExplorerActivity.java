@@ -19,6 +19,8 @@ import java.util.zip.ZipOutputStream;
 import com.explorer.adapter.ControlAdapter;
 import com.explorer.adapter.FileFolderAdapter;
 import com.explorer.adapter.ListViewAdapter;
+import com.explorer.taskmanager.TaskManager;
+import com.explorer.taskmanager.Test;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -718,6 +720,10 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 		case R.id.imvBackUpApp:
 			Intent startBackup = new Intent(this, ApplicationBackup.class);
 			startActivity(startBackup);
+			break;
+		case R.id.imvTaskKill:
+			Intent taskKill = new Intent(this, TaskManager.class);
+			startActivity(taskKill);
 			break;
 		case R.id.imvInforApp:
 			Intent infoApp = new Intent(this, ProcessManager.class);
@@ -1798,7 +1804,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 	public void setTheme() {
 		switch (choose_theme) {
 		case THEME_HIGHTLAND:
-			theme.setBackgroundResource(R.drawable.background);
+			theme.setBackgroundResource(R.drawable.bg_01);
 			rlcontrol.setBackgroundColor(Color.TRANSPARENT);
 			break;
 		case THEME_ANGEL:
@@ -1810,7 +1816,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener,
 			rlcontrol.setBackgroundColor(Color.TRANSPARENT);
 			break;
 		case THEME_GIRL:
-			theme.setBackgroundResource(R.drawable.tamt);
+			theme.setBackgroundResource(R.drawable.bg_02);
 			rlcontrol.setBackgroundColor(Color.TRANSPARENT);
 			break;
 		}
